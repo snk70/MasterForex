@@ -1,0 +1,313 @@
+﻿Build1=Default,shahin.app
+File1=arabic_description.html
+File10=login_page.bal
+File11=persion_description.html
+File12=persion_risk.html
+File13=register_page.bal
+File14=sign_up_page.bal
+File15=signal_item.png
+File16=signals_page.bal
+File17=signals_page_english.bal
+File18=strike.png
+File19=tick.png
+File2=arabic_risk.html
+File3=contact_us.bal
+File4=description_page.bal
+File5=Email_loyout.bal
+File6=english_description.html
+File7=english_risk.html
+File8=history_page.bal
+File9=home_page.bal
+FileGroup1=Default Group
+FileGroup10=Default Group
+FileGroup11=Default Group
+FileGroup12=Default Group
+FileGroup13=Default Group
+FileGroup14=Default Group
+FileGroup15=Default Group
+FileGroup16=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group
+FileGroup19=Default Group
+FileGroup2=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
+FileGroup5=Default Group
+FileGroup6=Default Group
+FileGroup7=Default Group
+FileGroup8=Default Group
+FileGroup9=Default Group
+Group=Default Group
+IconFile=
+Library1=core
+Library2=abextdrawing
+Library3=encryption
+Library4=json
+Library5=httputils2
+Library6=clipboard
+Library7=set_view_design
+Library8=checksignature
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+Module1=config_app_module
+Module10=check_srv
+Module11=sec_Class_1
+Module12=sizeviewV3
+Module2=Signals_ACT
+Module3=history_page
+Module4=Contact_ACT
+Module5=email_ACT
+Module6=login_ACT
+Module7=description_ACT
+Module8=sign_up_ACT
+Module9=Regular_Validations
+NumberOfFiles=19
+NumberOfLibraries=8
+NumberOfModules=12
+Version=8
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Master Forex Shahin
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: False
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+	Private btn_signal As Button
+	Private btn_signup As Button
+	Private btn_login As Button
+	Private btn_history As Button
+	Private btn_contact As Button
+	Private btn_lang As Button
+	Private Panel1 As Panel
+	Private EditText1 As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	
+	Dim sg As CheckSignature
+
+'	Activity.LoadLayout("x")
+'	Msgbox(EditText1.Gravity,"")
+	
+	Dim sc As sec_Class_1
+
+
+	If config_app_module.usn="" Or config_app_module.psd="" Then
+
+		Try
+			If File.Exists(File.DirInternal,config_app_module.us_path&"/"&config_app_module.us_file_name)=True And File.Exists(File.DirInternal,config_app_module.ps_path&"/"&config_app_module.ps_file_name)=True Then
+				config_app_module.usn=sc.Decryption(File.ReadString(File.DirInternal,config_app_module.us_path&"/"&config_app_module.us_file_name))
+				config_app_module.psd=sc.Decryption(File.ReadString(File.DirInternal,config_app_module.ps_path&"/"&config_app_module.ps_file_name))
+			End If
+		Catch
+			config_app_module.hand_work_app
+		End Try
+	
+	End If
+
+
+
+
+
+	Activity.LoadLayout("home_page")
+
+#region Set Sizes
+	'Size :
+	sizeviewV3.SetPX(Activity.Width,Activity.Height,240,320)
+	sizeviewV3.SetPastScreenSizetoInche(3.333,4.444)
+	sizeviewV3.SetSizeViews(Panel1,0,0,240,320,0)
+	sizeviewV3.SetSize_btn(btn_signup,10,160,70,40,15)
+	sizeviewV3.SetSize_btn(btn_login,10,10,70,40,15)
+	sizeviewV3.SetSize_btn(btn_signal,70,20,200,50,15)
+	sizeviewV3.SetSize_btn(btn_history,130,20,200,50,15)
+	sizeviewV3.SetSize_btn(btn_contact,190,20,200,50,15)
+	sizeviewV3.SetSize_btn(btn_lang,290,195,35,20,12)
+
+	'Design :
+
+
+#end region
+			
+	
+	
+	If File.Exists(File.DirInternal,config_app_module.app_lang_Path&"/"&config_app_module.app_lang_File)=True Then
+		config_app_module.selcted_language=sc.Decryption(File.ReadString(File.DirInternal,config_app_module.app_lang_Path&"/"&config_app_module.app_lang_File))
+	Else
+		btn_lang_Click
+	End If
+
+	btn_lang.Text=config_app_module.selcted_language
+	set_app_language
+
+	is_login
+
+
+	StartService(check_srv)
+
+End Sub
+
+
+Sub Activity_Resume
+
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+
+
+Sub btn_signal_Click
+StartActivity(Signals_ACT)
+Activity.Finish	
+End Sub
+
+Sub btn_history_Click
+StartActivity(history_page)
+Activity.Finish
+End Sub
+
+Sub btn_contact_Click
+StartActivity(Contact_ACT)
+Activity.Finish	
+End Sub
+
+
+Sub btn_lang_Click
+	Dim sc As sec_Class_1
+	
+	Dim lst_langs As List
+	lst_langs.Initialize2(config_app_module.app_lang)
+	
+	lst_langs.Initialize
+	For i=0 To config_app_module.app_lang.Length-1
+		If config_app_module.app_lang(i)="Fa" Then
+			lst_langs.Add(config_app_module.app_lang(i)&"  ( فارسی )")
+		Else If config_app_module.app_lang(i)="En" Then
+			lst_langs.Add(config_app_module.app_lang(i)&"  ( English )")
+		Else If config_app_module.app_lang(i)="Ar" Then
+			lst_langs.Add(config_app_module.app_lang(i)&"  ( العربیه )")
+		End If
+	Next
+	
+	Dim Item_sel As Int= InputList(lst_langs,"Select language"&CRLF&"انتخاب زبان",-1)
+	If Item_sel>-1 Then
+		config_app_module.selcted_language=config_app_module.app_lang(Item_sel)
+	Else
+		config_app_module.selcted_language=config_app_module.app_lang(0)
+	End If
+	File.MakeDir(File.DirInternal,config_app_module.app_lang_Path)
+	File.WriteString(File.DirInternal,config_app_module.app_lang_Path&"/"&config_app_module.app_lang_File,sc.Encryption(config_app_module.selcted_language))
+
+	btn_lang.Text=config_app_module.selcted_language
+	set_app_language
+	
+	is_login
+End Sub
+
+Sub set_app_language
+	If config_app_module.selcted_language="Fa" Then
+		#region فارسی
+		btn_login.Text="ورود"
+		btn_signup.Text="ثبت نام"
+		btn_signal.Text="سیگنال"
+		btn_history.Text="رزومه"
+		btn_contact.Text="تماس با ما"
+		#End Region
+	Else If config_app_module.selcted_language="En" Then
+		#region انگلیسی
+		btn_login.Text="Log in"
+		btn_signup.Text="Sign up"
+		btn_signal.Text="Signal"
+		btn_history.Text="History"
+		btn_contact.Text="Contact us"
+		#End Region
+	Else If config_app_module.selcted_language="Ar" Then
+		#region عربی
+		btn_login.Text="الدخول"
+		btn_signup.Text="التسجیل"
+		btn_signal.Text="إشارة"
+		btn_history.Text="سيرة الذاتية"
+		btn_contact.Text="إتصل بنا"
+		#End Region
+	End If
+End Sub
+
+
+Sub btn_signup_Click
+	
+	Dim rsp As Int
+	
+	If btn_signup.Tag="exit" Then
+		If config_app_module.selcted_language="Fa" Then
+		#region فارسی
+			rsp= Msgbox2("میخواهید از حساب کاربری خود خارج شوید ؟","خروج از حساب","بله","","خیر",Null)
+		#End Region
+		Else If config_app_module.selcted_language="En" Then
+		#region انگلیسی
+			rsp= Msgbox2("Do you want to sign out ?","Sign out","Yes","","No",Null)
+		#End Region
+		Else If config_app_module.selcted_language="Ar" Then
+		#region عربی
+			rsp= Msgbox2("هل تريد تسجيل الخروج من الحساب ؟","تسجيل الخروج","نعم","","لا",Null)
+		#End Region
+		End If
+
+		If rsp=DialogResponse.POSITIVE Then
+			config_app_module.hand_work_app
+			Activity_Create(False)
+		End If
+	Else
+		StartActivity(description_ACT)
+		Activity.Finish
+	End If
+End Sub
+
+
+Sub btn_login_Click
+	StartActivity(login_ACT)
+	Activity.Finish
+End Sub
+
+Sub is_login
+	
+'	Msgbox(config_app_module.usn&CRLF&config_app_module.psd,"")
+	
+	If config_app_module.usn<>"" And config_app_module.psd<>"" Then
+		'		کاربر لاگین کرده
+		btn_login.Visible=False
+		btn_signup.Width=(220/240)*Activity.Width
+		btn_signup.Left=(10/240)*Activity.Width
+		btn_signup.Tag="exit"
+		
+		If config_app_module.selcted_language="Fa" Then
+		#region فارسی
+			btn_signup.Text="خروج"
+		#End Region
+		Else If config_app_module.selcted_language="En" Then
+		#region انگلیسی
+			btn_signup.Text="Sign out"
+		#End Region
+		Else If config_app_module.selcted_language="Ar" Then
+		#region عربی
+			btn_signup.Text="تسجیل الخروج"
+		#End Region
+		End If
+	End If
+	
+End Sub
+
